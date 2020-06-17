@@ -21,9 +21,21 @@ function Book({ title }) {
   )
 }
 
-function Turn({ author, books }) {
+function Turn({ author, books, highlight }) {
+  function highlightToBgColor(highlight) {
+    const mapping = {
+      'none': '',
+      'correct': 'green',
+      'wrong': 'red',
+    }
+    return mapping[highlight]
+  }
+
   return (
-    <div className="row turn " style={{ backgroundColor: 'white' }}>
+    <div
+      className="row turn "
+      style={{ backgroundColor: highlightToBgColor(highlight) }}
+    >
       <div className="col-4 offset-1">
         <img src={author.imageUrl} className="authorimage" alt="Author" />
       </div>
@@ -56,11 +68,11 @@ function Footer() {
   )
 }
 
-function AuthorQuiz({ turnData }) {
+function AuthorQuiz({ turnData, highlight }) {
   return (
     <div className="container-fluid">
       <Hero />
-      <Turn {...turnData} />
+      <Turn {...turnData} highlight={highlight} />
       <Continue />
       <Footer />
     </div>

@@ -48,9 +48,9 @@ const authors = [
 ]
 
 function getTurnData(authors) {
-  const allBooks = authors.reduce(function (p, c, i) {
-    return p.concat(c.books)
-  }, [])
+  const filterBooks = (acc, curr) => [...acc, ...curr.books]
+
+  const allBooks = authors.reduce(filterBooks, [])
   const fourRandomBooks = shuffle(allBooks).slice(0, 4)
   const answer = sample(fourRandomBooks)
 
@@ -64,6 +64,7 @@ function getTurnData(authors) {
 
 const state = {
   turnData: getTurnData(authors),
+  highlight: 'correct',
 }
 
 ReactDOM.render(
