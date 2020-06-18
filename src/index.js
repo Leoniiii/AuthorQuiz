@@ -48,9 +48,9 @@ const authors = [
 ]
 
 function getTurnData(authors) {
-  const filterBooks = (acc, curr) => [...acc, ...curr.books]
-
-  const allBooks = authors.reduce(filterBooks, [])
+  const allBooks = authors.reduce(function (p, c, i) {
+    return p.concat(c.books)
+  }, [])
   const fourRandomBooks = shuffle(allBooks).slice(0, 4)
   const answer = sample(fourRandomBooks)
 
@@ -64,16 +64,22 @@ function getTurnData(authors) {
 
 const state = {
   turnData: getTurnData(authors),
-  highlight: 'correct',
+  highlight: '',
 }
 
-ReactDOM.render(
-  <React.StrictMode>
-    <AuthorQuiz {...state} />
-  </React.StrictMode>,
-  document.getElementById('root')
-)
+function onAnswerSelected(answer) {
+  const isCorrect = state.turnData.author.books.some((book) => book === answer)
+  state.highlight = isCorrect ? 'correct' : 'wrong'
+  render()
+}
 
+function render() {
+  ReactDOM.render(
+    <AuthorQuiz {...state} onAnswerSelected={onAnswerSelected} />,
+    document.getElementById('root')
+  )
+}
+render()
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
